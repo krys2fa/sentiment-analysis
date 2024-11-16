@@ -4,8 +4,18 @@ from flask_cors import CORS
 import os
 import nltk
 
-nltk_data_path = os.path.join(os.getcwd(), 'nltk_data')
-nltk.data.path.append(nltk_data_path)
+# Check if in deployment environment
+if os.getenv("DEPLOY_ENV") == "true":
+    nltk_data_dir = "/app/nltk_data"  # Custom NLTK data directory
+    if not os.path.exists(nltk_data_dir):
+        os.makedirs(nltk_data_dir)
+
+    nltk.data.path.append(nltk_data_dir)
+    nltk.download("vader_lexicon", download_dir=nltk_data_dir)
+
+else:
+    nltk_data_path = os.path.join(os.getcwd(), 'nltk_data')
+    nltk.data.path.append(nltk_data_path)
 
 app = Flask(__name__)
 
