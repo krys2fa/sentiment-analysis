@@ -1,0 +1,5 @@
+# Ignore .git files
+.git
+
+# Ignore node_modules (in both backend and frontend)
+node_modules
