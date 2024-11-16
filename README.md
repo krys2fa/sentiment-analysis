@@ -7,6 +7,10 @@ This project is a **Sentiment Analysis** application that analyzes the sentiment
 
 The app uses a **CI/CD pipeline** for automated testing and deployment to **Render** (for the Flask backend) and **Vercel** (for the React frontend).
 
+## Live Demo
+
+Click [here](https://sentiment-analysis-wine.vercel.app/) for a live preview.
+
 ## Features
 
 - **Sentiment Analysis**: Analyze the sentiment of text (positive, negative, neutral).

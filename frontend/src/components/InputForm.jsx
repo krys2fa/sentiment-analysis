@@ -6,10 +6,12 @@ const InputForm = ({ setSentiment }) => {
   const [text, setText] = useState("");
   const [error, setError] = useState(null);
 
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://127.0.0.1:5000/predict", {
+      const response = await axios.post(`${API_BASE_URL}/predict`, {
         text,
       });
       setSentiment(response.data.sentiment);
