@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import Notification from "./Notification";
 
-const InputForm = () => {
+const InputForm = ({ setSentiment }) => {
   const [text, setText] = useState("");
-  const [sentiment, setSentiment] = useState(null);
   const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
@@ -35,13 +34,6 @@ const InputForm = () => {
           Analyze Sentiment
         </button>
       </form>
-
-      {/* Sentiment Result */}
-      {sentiment && (
-        <div className='mt-4 p-4 bg-green-100 text-green-700 rounded-md shadow-md'>
-          Sentiment: {sentiment}
-        </div>
-      )}
 
       {/* Error Notification */}
       {error && (
