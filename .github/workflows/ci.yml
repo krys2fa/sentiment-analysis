@@ -1,0 +1,81 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # Job for Flask backend
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install dependencies for Flask
+        run: |
+          cd backend
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+
+      - name: Run Flask Tests
+        run: |
+          cd backend
+          source venv/bin/activate
+          pytest  # Assuming you have some backend tests set up
+
+  # Job for React frontend
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      - name: Install dependencies for React
+        run: |
+          cd frontend
+          npm install
+
+      - name: Run React Tests
+        run: |
+          cd frontend
+          npm run test -- --coverage  # Assumes you have tests set up
+
+  # Combined deployment job
+  deploy:
+    needs: [backend, frontend] # Ensure backend and frontend jobs are complete before deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up environment variables
+        run: echo "DEPLOYMENT_ENV=production" >> $GITHUB_ENV
+
+      # Backend Deployment (Flask)
+      - name: Deploy Flask App to Render
+        run: |
+          cd backend
+          git remote add render https://<render-repo-url>
+          git push render main  # Pushes your Flask app to Render
+
+      # Frontend Deployment (React)
+      - name: Deploy React App to Vercel
+        run: |
+          cd frontend
+          vercel --prod  # This assumes Vercel CLI is installed and configured
